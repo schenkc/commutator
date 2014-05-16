@@ -1,16 +1,17 @@
 class Word
+  attr_accessor :letters
   
   def initialize(word)
-    @letter_array = []
+    @letters = []
     word.split('.').each do |letter|
-      @letter_array << Letter.new(letter)
+      @letters << Letter.new(letter)
     end
   end
   
   def to_s
     word_array = []
     
-    @letter_array.each do |letter|
+    letters.each do |letter|
       word_array << letter.to_s
     end
     
@@ -20,7 +21,7 @@ class Word
   def to_latex
     word_array = []
     
-    @letter_array.each do |letter|
+    letters.each do |letter|
       word_array << letter.to_latex
     end
     
@@ -28,31 +29,30 @@ class Word
   end
   
   def [](index)
-    @letter_array[index]
+    letters[index]
   end
   
   # oh, do I want a letter here or a string?
   def []=(index, letter)
-    @letter_array[index] = Letter.new(letter)
+    letters[index] = Letter.new(letter)
   end
   
-  def each
-    length = @letter_array.size
-    (0..length-1).each do |i|
-      yield @letter_array[i]
+  def each(&block)
+    i = 0
+    while i < self.length
+      block.call(self[i])
+      i += 1
     end
+    
+    self
   end
   
-  def size
-    @letter_array.size
+  def length
+    letters.length
   end
   
-  def actual_size
-    count = 0
-    self.each do |letter|
-      count = count + letter.exp.abs
-    end
-    return count
+  def number_of_letters
+    self.inject(0) { |accum, letter| accum += letter.exp.abs}
   end
 
   def eql?(compare)
@@ -60,6 +60,7 @@ class Word
   end
   
   def ==(compare)
+    # this should really be equal as group elements
     self.to_s == compare.to_s
   end
   
@@ -68,27 +69,24 @@ class Word
   end
   
   def invert!
-    @letter_array.reverse!
-    @letter_array.each do |letter|
-      letter.invert!
-    end
-    self
+    letters.map { |letter| letter.invert! }.reverse!
   end
   
   def invert
-    Word.new(self.to_s).invert!
+    letters.map { |letter| letter.invert }.reverse
   end
   
   def delete_letter!(i)
-    @letter_array.delete_at(i)
+    letters.delete_at(i)
   end
   
-  def remove_inverses!
+  def combine_like_terms!
     i=0
     until self[i+1].nil?
-      if self[i].inverse? self[i+1]
-        delete_letter!(i)
-        delete_letter!(i)
+      if self[i].index == self[i+1].index
+        self[i].exp += self[i+1].exp
+        delete_letter!(i+1)
+        delete_letter!(i) if self[i].exp == 0
         i = 0
       else
         i +=1
@@ -102,7 +100,7 @@ class Word
   end
   
   def swap!(i,j)
-    @letter_array[i], @letter_array[j] = @letter_array[j], @letter_array[i]
+    letters[i], letters[j] = letters[j], letters[i]
     self
   end
   
