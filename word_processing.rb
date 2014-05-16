@@ -1,171 +1,37 @@
-
-require 'set'
-
-class Letter
-  def index
-    @index
-  end
-  
-  def exp
-    @exp
-  end
-  
-  def initialize(letter_string)
-    if letter_string.nil?
-      nil
-    else
-      temp_array = letter_string.split(/x_|\^/)
-      @index = temp_array[1].to_i
-      if temp_array[2].nil?
-        @exp = 1.to_i
-      else
-        @exp = temp_array[2].to_i
-      end
-    end
-  end
-  
-  def to_s
-    if @exp.nil?
-      "x_#@index"
-    elsif @exp == 1
-      "x_#@index"
-    elsif @exp == 0
-      ""
-    else
-      "x_#@index\^#@exp"
-    end
-  end
-  
-  def to_latex
-    if @exp.nil?
-      "x_\{#@index\}"
-    elsif @exp == 1
-      "x_\{#@index\}"
-    elsif @exp == 0
-      ""
-    else 
-      "x_\{#@index\}\^\{#@exp\}"
-    end
-  end
-  
-  def lower_index!
-    @index -=1
-    self
-  end
-  
-  def raise_index!
-    @index += 1
-    self
-  end
-  
-  def add_exp(input)
-    @exp = @exp + input.to_i
-    self
-  end
-  
-  def invert!
-    if @exp.nil?
-      @exp = -1
-    else
-      @exp = -@exp
-    end
-    self
-  end
-  
-  def invert
-    Letter.new(self.to_s).invert!
-  end 
-  
-  def ==(letter)
-    unless letter.nil?
-      if self.index == letter.index and self.exp == letter.exp
-        return true
-      else
-        return false
-      end
-      return letter.nil?
-    end
-  end
-  
-  def inverse?(letter)
-   unless letter.nil?
-     if self.index == letter.index and self.exp == -letter.exp
-       return true
-     else
-       return false
-     end
-     return letter.nil?
-   end
-  end 
-  
-  def neg?
-    unless self.nil?
-      if self.exp < 0
-        return true
-      else
-        return false
-      end
-      return letter.nil?
-    end
-  end
-  
-  def pos?
-    unless self.nil?
-      if self.exp > 0
-        return true
-      else
-        return false
-      end
-      return letter.nil?
-    end
-  end
-  
-  
-end
-
-
 class Word
   
   def initialize(word)
-    @letter_array = Array.new
-    if word.nil?
-      nil
-    else 
-      word.split('.').each do |letter|
-        @letter_array << Letter.new(letter)
-      end
+    @letter_array = []
+    word.split('.').each do |letter|
+      @letter_array << Letter.new(letter)
     end
-    self
   end
   
   def to_s
-    if @letter_array[0].nil?
-      ''
-    else
-      word_array = Array.new
-      @letter_array.each do |letter|
-        word_array << letter.to_s
-      end
-      word_array*'.'
+    word_array = []
+    
+    @letter_array.each do |letter|
+      word_array << letter.to_s
     end
+    
+    word_array.join('.')
   end
   
   def to_latex
-    if @letter_array[0].nil?
-      ''
-    else
-      word_array = Array.new
-      @letter_array.each do |letter|
-        word_array << letter.to_latex
-      end
-      word_array*'.'
+    word_array = []
+    
+    @letter_array.each do |letter|
+      word_array << letter.to_latex
     end
+    
+    word_array.join('.')
   end
   
   def [](index)
     @letter_array[index]
   end
   
+  # oh, do I want a letter here or a string?
   def []=(index, letter)
     @letter_array[index] = Letter.new(letter)
   end
