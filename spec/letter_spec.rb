@@ -8,29 +8,63 @@ describe Letter do
 
   describe '#to_s' do
   
-    it 'returns a string'
-    it "returns a no exponent if exp = 1"
-    it 'returns an empty string if exp = 0'
-    it 'returns something of the form x_5^12'
+    it 'returns a string' do
+      expect(x_14.to_s).to be_a(String)
+    end
+    
+    it "returns a no exponent if exp = 1" do
+      expect(x_0.to_s).to eq("x_0")
+    end
+    
+    it 'returns an empty string if exp = 0' do
+      expect(x_10.to_s).to eq("")
+    end
+    
+    it 'returns something of the form x_5^12' do
+      expect(x_14.to_s).to eq("x_1^4")
+    end
   
   end
 
   describe '#to_latex' do
-    it 'should have curly braces'
-    it 'should be empty if exp = 0'
+    
+    it 'should have curly braces' do
+      expect(x_0.to_latex).to eq("x_{0}")
+    end
+    
+    it 'should be empty if exp = 0' do
+      expect(x_10.to_latex).to eq('')
+    end
+    
   end
 
   describe '#lower_index!' do
-    it 'should raise an error if index < 1'
-    it 'should lower the index by 1'
+    it 'should raise an error if index < 1' do
+      expect do
+        x_0.lower_index!
+      end.to raise_error("Can't have negitive index")
+    end
+    
+    it 'should lower the index by 1' do
+      test_letter = x_14.lower_index!
+      new_index = test_letter.index
+      expect(new_index).to eq(0)
+    end
   end
 
   describe '#raise_index!' do
-    it 'should raise the index by 1'
+    it 'should raise the index by 1' do
+      test_letter = x_0.raise_index!
+      new_index = test_letter.index
+      expect(new_index).to eq(1)
+    end
   end
 
   describe '#invert!' do
-    it 'should negate the exponent'
+    it 'should negate the exponent' do
+      test = x_14.invert!
+      expect(test.exp).to eq(-4)
+    end
   end
 
   describe '#invert' do

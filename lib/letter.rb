@@ -33,12 +33,14 @@ class Letter
   end
   
   def lower_index!
-    raise "Can't have negitive index" if index == 0
-    index -=1
+    raise "Can't have negitive index" if @index == 0
+    @index -= 1
+    self
   end
   
   def raise_index!
-    index += 1
+    @index += 1
+    self
   end
  
  #  is this needed?  I think not, but I don't know if I call it anywere
