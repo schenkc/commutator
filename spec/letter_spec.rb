@@ -68,28 +68,65 @@ describe Letter do
   end
 
   describe '#invert' do
-    it 'should return the inverse, but not change the orginal'
+    it 'should return the inverse, but not change the orginal' do
+      test = x_14.invert
+      expect(test.exp).to eq(-4)
+      expect(test).to_not eq(x_14)
+    end
   end
 
   describe '#==' do
-    it 'should return true when letters are equal (but different instances)'
-    it 'should return false with different exponets'
-    it 'should return false with different indexs'
+    it 'should return true when letters are equal (but different instances)' do
+      letter = Letter.new("x_1^4")
+      expect(x_14 == letter).to be_true
+    end
+    
+    it 'should return false with different exponets' do
+      letter = Letter.new("x_1")
+      expect(letter == x_14).to be_false
+    end
+    
+    it 'should return false with different indexs' do
+      letter = Letter.new("x_1")
+      expect(letter == x_0).to be_false
+    end
   end
 
   describe '#inverse?' do
-    it 'should return true if index is the same, and exponent inverses different'
-    it 'should return false if the index is the same, and the exponents not inverses'
-    it 'should return false if different index'
+    it 'should return true if index is the same, and exponent inverses different' do
+      letter = Letter.new("x_0^-1")
+      expect(x_0.inverse?(letter)).to be_true
+    end
+    
+    it 'should return false if the index is the same, and the exponents not inverses' do
+      expect(x_0.inverse?(x_0)).to be_false
+    end
+    
+    it 'should return false if different index' do
+      letter = Letter.new("x_1")
+      expect(x_0.inverse?(letter)).to be_false
+    end
   end
 
   describe '#neg?' do
-    it 'should return true if exp is less than 0'
-    it 'should return false if exp is greater than 0'
+    it 'should return true if exp is less than 0' do
+      letter = Letter.new("x_1^-1")
+      expect(letter.neg?).to be_true
+    end
+    
+    it 'should return false if exp is greater than 0' do
+      expect(x_0.neg?).to be_false
+    end
   end
 
   describe '#pos?' do
-    it 'should return true if exp is greater than 0'
-    it 'should return false if exp is less than 0'
+    it 'should return true if exp is greater than 0' do
+      expect(x_0.pos?).to be_true
+    end
+    
+    it 'should return false if exp is less than 0' do
+      letter = Letter.new("x_1^-1")
+      expect(letter.pos?).to be_false
+    end
   end
 end
