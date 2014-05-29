@@ -95,7 +95,7 @@ class Word
     self
   end
   
-  def remove_inverses
+  def combine_like_terms
     Word.new(self.to_s).remove_inverses!
   end
   

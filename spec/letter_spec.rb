@@ -6,6 +6,36 @@ describe Letter do
   let(:x_10) { Letter.new("x_1^0") }
   let(:x_14) { Letter.new("x_1^4") }
 
+  describe "#initialize" do
+    it 'should set index and exponent correctly' do
+      expect(x_0.index).to eq(0)
+      expect(x_0.exp).to eq(1)
+      expect(x_14.index).to eq(1)
+      expect(x_14.exp).to eq(4) 
+    end
+    
+    it 'should raise "bad index"' do
+      expect do 
+        Letter.new("x_-1")
+      end.to raise_error("Bad index, try again")
+      expect do
+        Letter.new("x_a")
+      end.to raise_error("Bad index, try again")
+      expect do 
+        Letter.new("x_^")
+      end.to raise_error("Bad index, try again")
+    end
+    
+    it 'should raise "bad exponent"' do
+      expect do
+        Letter.new("x_1^a")
+      end.to raise_error("Bad exponent, try again")
+      expect do
+        Letter.new("x_^")
+      end.to raise_error("Bad exponent, try again")
+    end
+  end
+  
   describe '#to_s' do
   
     it 'returns a string' do

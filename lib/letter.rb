@@ -7,7 +7,7 @@ class Letter
     # return nil if letter_string.nil?
 
     temp_array = letter_string.split(/x_|\^/)
-    @index = temp_array[1].to_i
+    @index = Integer(temp_array[1])
     temp_array[2].nil? ? @exp = 1 : @exp = temp_array[2].to_i
 
   end
