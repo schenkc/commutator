@@ -4,11 +4,23 @@ class Letter
 
   
   def initialize(letter_string)
-    # return nil if letter_string.nil?
+    regex = /x_(\d+)(\^(\-?\d*))?/
+    letter_data = regex.match(letter_string)
+    
+    if letter_data
+      @index = letter_data[1].to_i
+      raise "Bad index, try again" if @index < 0
+      if letter_data[2].nil?
+        @exp = 1
+      elsif letter_data[2] && letter_data[3] != ""
+        @exp = Integer(letter_data[3])
+      elsif letter_data[2] && letter_data[3] == ""
+        raise "Bad exponent, try again"
+      end
+    else
+      raise "Bad index, try again"
+    end
 
-    temp_array = letter_string.split(/x_|\^/)
-    @index = Integer(temp_array[1])
-    temp_array[2].nil? ? @exp = 1 : @exp = temp_array[2].to_i
 
   end
   

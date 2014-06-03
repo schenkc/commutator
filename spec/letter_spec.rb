@@ -31,7 +31,7 @@ describe Letter do
         Letter.new("x_1^a")
       end.to raise_error("Bad exponent, try again")
       expect do
-        Letter.new("x_^")
+        Letter.new("x_0^")
       end.to raise_error("Bad exponent, try again")
     end
   end

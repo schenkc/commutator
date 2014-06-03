@@ -3,12 +3,20 @@ require 'letter'
 require 'word'
 
 describe Word do
-  let(:x_0) { Word.new("x_0.x_1") }
-  let(:x_10) { Letter.new("x_1^0") }
-  let(:x_14) { Letter.new("x_1^4") }
+  let(:a) { Word.new("x_0.x_1.x_0") }
+  let(:b) { Word.new("x_0^-1.x_1") }
+  let(:c) { Word.new("x_0.x_3.x_0^-1") }
+  let(:d) { Word.new("x_5^-3") }
+  
+  describe "#initalize" do
+    
+  end
   
   describe "#to_s" do
-    
+    it "return a string" do
+      expect(a.to_s).to eq("x_0.x_1.x_0")
+      expect(b.to_s).to eq("x_0^-1.x_1")
+    end
   end
   
   describe "#to_latex" do
