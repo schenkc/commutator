@@ -63,6 +63,16 @@ describe Word do
     end
   end
   
+  describe "#dup" do
+    it "should make a copy of the word" do
+      expect(b.dup).to eq(b)
+    end
+    
+    it "should be a different object" do
+      expect(b.dup.object_id == b.object_id).to be_false
+    end
+  end
+  
   describe "#number_of_letters" do
     it "should add exponents" do
       expect(b.number_of_letters).to eq(2)
@@ -118,7 +128,7 @@ describe Word do
       expect(a.invert!).to eq(a)
     end
     it "does reverse the letter order and negate exponents" do
-      b.invert! # b = x_0^-1.x_1
+      b.invert! # b = x_0^-1.x_1, b^-1 = x_1^-1.x_0
       expect(b[0]).to eq(Letter.new("x_1^-1"))
       expect(b[1]).to eq(Letter.new("x_0"))
     end
@@ -126,9 +136,14 @@ describe Word do
   end
   
   describe "#invert" do
-    it "does not change the original word"
-    it "does reverse the letter order"
-    it "does negate the exponents"
+    it "does not change the original word" do
+      b.invert
+      expect(b).to eq(b)
+    end
+    
+    it "does reverse the letter order and negate exponents" do
+      expect(b.invert).to eq(Word.new("x_1^-1.x_0"))
+    end
   end
   
   describe "#delete_letter!" do 

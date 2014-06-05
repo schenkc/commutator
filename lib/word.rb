@@ -48,6 +48,10 @@ class Word
     self
   end
   
+  def dup
+    Word.new(self.to_s)
+  end
+  
   def number_of_letters
     letters.inject(0) { |accum, letter| accum += letter.exp.abs }
   end
@@ -65,7 +69,7 @@ class Word
   end
   
   def invert!
-    letters.map { |letter| letter.invert! }.reverse!
+    letters.map! { |letter| letter.invert! }.reverse!
     self
   end
   
