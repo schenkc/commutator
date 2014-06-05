@@ -76,31 +76,53 @@ describe Word do
   
   describe "#different_representation?" do
     it "returns true when the letters' order and are the same" do
-      expect(b.different_representation?(b_normal)).to eq(true)
+      expect(b.different_representation?(b_normal)).to be_true
     end
     
     it "returns false when the words are not equivalent" do
-    
+      expect(a.different_representation?(b)).to be_false
     end
     
     it "returns false when the words are identical as letters" do
-      
+      expect(a.different_representation?(a)).to be_false
     end
   end
   
   describe "#==" do
-    it "return true when the group elements are equal"
+    it "returns true when the letters' order and are the same" do
+      expect(b == b_normal).to be_true
+    end
+    
+    it "returns false when the words are not equivalent" do
+      expect(a == b).to be_false
+    end
+    
+    it "returns true when the words are identical as letters" do
+      q = Word.new("x_0.x_1.x_0")
+      expect(a == q).to be_true
+    end
   end
   
   describe "#nil?" do
-    it "returns true when the word has no letters"
-    it "returns false when the word has letters"
+    it "returns true when the word has no letters" do
+      expect(empty.nil?).to be_true
+    end
+    
+    it "returns false when the word has letters" do
+      expect(a.nil?).to be_false
+    end
   end
   
   describe "#invert!" do
-    it "does change the original word"
-    it "does reverse the letter order"
-    it "does negate the exponents"
+    it "does change the original word" do
+      expect(a.invert!).to eq(a)
+    end
+    it "does reverse the letter order and negate exponents" do
+      b.invert! # b = x_0^-1.x_1
+      expect(b[0]).to eq(Letter.new("x_1^-1"))
+      expect(b[1]).to eq(Letter.new("x_0"))
+    end
+    
   end
   
   describe "#invert" do

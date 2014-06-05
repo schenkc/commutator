@@ -66,6 +66,7 @@ class Word
   
   def invert!
     letters.map { |letter| letter.invert! }.reverse!
+    self
   end
   
   def invert
