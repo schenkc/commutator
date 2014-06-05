@@ -32,14 +32,15 @@ class Word
     letters[index]
   end
   
-  # oh, do I want a letter here or a string?
-  def []=(index, letter)
-    letters[index] = Letter.new(letter)
+  def []=(idx, letter)
+    # this takes a letter object, not a letter string
+    # should check to make sure that letter is a letter object
+    letters[idx] = letter
   end
   
   def each(&block)
     i = 0
-    while i < self.length
+    while i < letters.length
       block.call(self[i])
       i += 1
     end
@@ -47,12 +48,8 @@ class Word
     self
   end
   
-  def length
-    letters.length
-  end
-  
   def number_of_letters
-    self.inject(0) { |accum, letter| accum += letter.exp.abs}
+    letters.inject(0) { |accum, letter| accum += letter.exp.abs }
   end
 
   def eql?(compare)
@@ -60,7 +57,6 @@ class Word
   end
   
   def ==(compare)
-    # this should really be equal as group elements
     self.to_s == compare.to_s
   end
   

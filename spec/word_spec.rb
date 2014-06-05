@@ -4,9 +4,14 @@ require 'word'
 
 describe Word do
   let(:a) { Word.new("x_0.x_1.x_0") }
+  
   let(:b) { Word.new("x_0^-1.x_1") }
+  let(:b_normal) { Word.new("x_2.x_0^-1") }
+  
   let(:c) { Word.new("x_0.x_3.x_0^-1") }
   let(:d) { Word.new("x_5^-3") }
+  let(:e) { Word.new("x_0") }
+  let(:empty) { Word.new("") }
   
   describe "#initalize" do
     
@@ -16,31 +21,71 @@ describe Word do
     it "return a string" do
       expect(a.to_s).to eq("x_0.x_1.x_0")
       expect(b.to_s).to eq("x_0^-1.x_1")
+      expect(e.to_s).to eq("x_0")
     end
   end
   
   describe "#to_latex" do
-    
+    it "should read like latex" do
+      expect(c.to_latex).to eq("x_{0}.x_{3}.x_{0}^{-1}")
+      expect(e.to_latex).to eq("x_{0}")
+    end
   end
   
   describe "#[]" do
+    it "should return a letter object" do
+      expect(a[0]).to be_a_kind_of(Letter)
+      expect(a[0]).to eq(Letter.new("x_0"))
+    end
     
   end
   
   describe "#[]=" do
+    it "should replace the ith letter, with a letter" do
+      a[0]=d[0]
+      expect(a).to eq(Word.new("x_5^-3.x_1.x_0")) 
+    end
+    
+    it "should add a letter to a new bin" do
+      a[3] = d[0]
+      expect(a).to eq(Word.new("x_0.x_1.x_0.x_5^-3"))
+    end
   end
   
   describe "#each" do
-  end
-  
-  describe "#length" do
+    it "should take a block"
+    
+    # ask how expect can take a block.
+    it "should return the word" do
+      w = a.each { |x| x.invert }
+      
+      expect(w).to eq(a)
+    end
   end
   
   describe "#number_of_letters" do
+    it "should add exponents" do
+      expect(b.number_of_letters).to eq(2)
+      expect(c.number_of_letters).to eq(3)
+    end
+    
+    it "should deal with the empty word" do
+      expect(empty.number_of_letters).to eq(0)
+    end
   end
   
-  describe "#eql?" do
-    it "return true when the letters' order and are the same"
+  describe "#different_representation?" do
+    it "returns true when the letters' order and are the same" do
+      expect(b.different_representation?(b_normal)).to eq(true)
+    end
+    
+    it "returns false when the words are not equivalent" do
+    
+    end
+    
+    it "returns false when the words are identical as letters" do
+      
+    end
   end
   
   describe "#==" do

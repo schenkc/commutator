@@ -72,7 +72,7 @@ describe Letter do
     it 'should raise an error if index < 1' do
       expect do
         x_0.lower_index!
-      end.to raise_error("Can't have negitive index")
+      end.to raise_error("Can't have negative index")
     end
     
     it 'should lower the index by 1' do
@@ -88,6 +88,14 @@ describe Letter do
       new_index = test_letter.index
       expect(new_index).to eq(1)
     end
+  end
+  
+  describe '#add_exp' do
+    it 'should raise the exponent by the correct amount' do
+      x_0.add_exp(3)
+      
+      expect(x_0.exp).to eq(4)
+    end  
   end
 
   describe '#invert!' do
@@ -119,6 +127,10 @@ describe Letter do
     it 'should return false with different indexs' do
       letter = Letter.new("x_1")
       expect(letter == x_0).to be_false
+    end
+    
+    it "should return false if not a letter" do
+      expect( 2 == x_0 ).to be_false
     end
   end
 

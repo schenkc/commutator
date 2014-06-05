@@ -20,8 +20,6 @@ class Letter
     else
       raise "Bad index, try again"
     end
-
-
   end
   
   def to_s
@@ -45,7 +43,7 @@ class Letter
   end
   
   def lower_index!
-    raise "Can't have negitive index" if @index == 0
+    raise "Can't have negative index" if @index == 0
     @index -= 1
     self
   end
@@ -55,9 +53,8 @@ class Letter
     self
   end
  
- #  is this needed?  I think not, but I don't know if I call it anywere
   def add_exp(input)
-    exp = exp + input.to_i
+    @exp += input
   end
   
   def invert!
@@ -70,8 +67,8 @@ class Letter
   end 
   
   def ==(letter)
+    return false if letter.nil? || letter.class != Letter
     return (index == letter.index && exp == letter.exp) unless letter.nil?
-    return false if letter.nil?
   end
   
   def inverse?(letter)
@@ -86,5 +83,4 @@ class Letter
   def pos?
     exp > 0
   end
-  
 end
