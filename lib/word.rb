@@ -74,7 +74,8 @@ class Word
   end
   
   def invert
-    letters.map { |letter| letter.invert }.reverse
+    word = self.dup
+    word.invert!
   end
   
   def delete_letter!(i)
