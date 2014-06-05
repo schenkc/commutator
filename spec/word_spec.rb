@@ -147,20 +147,87 @@ describe Word do
   end
   
   describe "#delete_letter!" do 
-    it "removes letter"
+    it "removes letter" do
+      b.delete_letter!(0)
+      expect(b).to eq(Word.new("x_1"))
+    end
   end
   
   describe "#combine_like_terms!" do
-    it "removes a.a^-1, a^-1.a"
+    it "removes a.a^-1" do
+      word = Word.new("x_0.x_0^-1")
+      word.combine_like_terms!
+      expect(word.nil?).to be_true
+      
+      other_word = Word.new("x_0.x_0^-1.x_1")
+      other_word.combine_like_terms!
+      expect(other_word).to eq(Word.new("x_1"))
+      
+      another_word = Word.new("x_1.x_0.x_0^-1.x_3")
+      another_word.combine_like_terms!
+      expect(another_word).to eq(Word.new("x_1.x_3"))
+    end
+    
+    it "removes a^-1.a" do
+      word = Word.new("x_0^-1.x_0")
+      word.combine_like_terms!
+      expect(word.nil?).to be_true
+      
+      other_word = Word.new("x_0^-1.x_0.x_1")
+      other_word.combine_like_terms!
+      expect(other_word).to eq(Word.new("x_1"))
+      
+      another_word = Word.new("x_1.x_0^-1.x_0.x_3")
+      another_word.combine_like_terms!
+      expect(another_word).to eq(Word.new("x_1.x_3"))
+    end
   end
   
   describe "#combine_like_terms" do
-    it "removes a.a^-1 and a^-1.a"
-    it "does not change the original"
+    it "removes a.a^-1" do
+      word = Word.new("x_0.x_0^-1")
+      w = word.combine_like_terms
+      expect(w.nil?).to be_true
+      
+      other_word = Word.new("x_0.x_0^-1.x_1")
+      ow = other_word.combine_like_terms
+      expect(ow).to eq(Word.new("x_1"))
+      
+      another_word = Word.new("x_1.x_0.x_0^-1.x_3")
+      aw = another_word.combine_like_terms
+      expect(aw).to eq(Word.new("x_1.x_3"))
+    end
+    
+    it "removes a^-1.a" do
+      word = Word.new("x_0^-1.x_0")
+      w = word.combine_like_terms
+      expect(w.nil?).to be_true
+      
+      other_word = Word.new("x_0^-1.x_0.x_1")
+      ow = other_word.combine_like_terms
+      expect(ow).to eq(Word.new("x_1"))
+      
+      another_word = Word.new("x_1.x_0^-1.x_0.x_3")
+      aw = another_word.combine_like_terms
+      expect(aw).to eq(Word.new("x_1.x_3"))
+    end
+    
+    it "does not change the original" do
+      another_word = Word.new("x_1.x_0^-1.x_0.x_3")
+      another_word.combine_like_terms
+      expect(another_word).to eq(Word.new("x_1.x_0^-1.x_0.x_3"))
+    end
+      
   end
   
   describe "#swap!(i,j)" do
-    it "swaps the ith and jth letter"
+    it "swaps the ith and jth letter" do
+      expect(c.swap!(0,1)).to eq(Word.new("x_3.x_0.x_0^-1"))
+    end
+    
+    it "doesn't swap letters if one of the numbers is out of bounds" do
+      expect(c.swap!(0,5)).to eq(c)
+    end
   end
   
   describe "#to_normal_form!" do
