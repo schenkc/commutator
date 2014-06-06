@@ -231,6 +231,7 @@ describe Word do
   end
   
   describe "#to_normal_form!" do
+    # words to check x_0.x_1 (nothing), x_1.x_0 = x_0.x_2, x_0^-1.x_2.x_0 = x_3, x_1^-1.x_0^-1 (nothing to do), x_0^-1.x_1^-1 = x_2^-1.x_0^-1, x_0.x_1.x_5^-1.x_3^-2.x_1^-1.x_0^-1 = x_5^-1.x_1^-2, x_0^-1.x_2^5.x_3.x_1^-1
     
   end
   
