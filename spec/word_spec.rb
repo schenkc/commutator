@@ -231,7 +231,45 @@ describe Word do
   end
   
   describe "#to_normal_form!" do
-    # words to check x_0.x_1 (nothing), x_1.x_0 = x_0.x_2, x_0^-1.x_2.x_0 = x_3, x_1^-1.x_0^-1 (nothing to do), x_0^-1.x_1^-1 = x_2^-1.x_0^-1, x_0.x_1.x_5^-1.x_3^-2.x_1^-1.x_0^-1 = x_5^-1.x_1^-2, x_0^-1.x_2^5.x_3.x_1^-1
+    it "words in normal form should be unchanged" do
+      a1 = Word.new("x_0.x_1")
+      expect(a1.to_normal_form!).to eq(Word.new("x_0.x_1"))
+    end
+    
+    it "can deal with positive words" do
+      a2 = Word.new("x_1.x_0")
+      expect(a2.to_normal_form!).to eq(Word.new("x_0.x_2"))
+    end
+    
+    it "can move negitive letters all the way to the right" do
+      a3 = Word.new("x_0^-1.x_2.x_0")
+      expect(a3.to_normal_form!).to eq(Word.new("x_3"))
+      
+      a10 = Word.new("x_1^-1.x_2.x_0")
+      expect(a3.to_normal_form!).to eq(Word.new("x_0.x_4.x_2^-1"))
+    end
+    
+    it "words in formal form should be unchanged" do
+      a4 = Word.new("x_1^-1.x_0^-1")
+      expect(a4.to_normal_form!).to eq(Word.new("x_1^-1.x_0^-1"))
+    end
+    
+    it "can deal with negitive words" do
+      a5 = Word.new("x_0^-1.x_1^-1")
+      expect(a5.to_normal_form!).to eq(Word.new("x_2^-1.x_0^-1"))
+    end
+    
+    it "can deal with multiple conjugate downs" do
+      a6 = Word.new("x_0.x_1.x_5^-1.x_3^-2.x_1^-1.x_0^-1")
+      expect(a6.to_normal_form!).to eq(Word.new("x_5^-1.x_1^-2"))
+    end
+    
+    it "can deal with big exponents" do
+      a7 = Word.new("x_0^-1.x_2^5.x_3.x_1^-1")
+      expect(a7.to_normal_form!).to eq(Word.new("x_3^5.x_4.x_2^-1.x_0^-1"))
+      a8 = Word.new("x_0^-1.x_3.x_2^5.x_1^-1")
+      expect(a7.to_normal_form!).to eq(Word.new("x_3^5.x_9.x_2^-1.x_0^-1"))
+    end
     
   end
   
