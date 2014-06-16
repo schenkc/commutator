@@ -276,12 +276,12 @@ describe Word do
   describe "#in_commF?" do
     describe "should deal with words in normal form" do
       it "should return true if in commutator subgroup" do
-        c1 = Word.new("x_0^2.x_1.x_2^-1.x_0^2")
+        c1 = Word.new("x_0^2.x_1.x_2^-1.x_0^-2")
         expect(c1.in_commF?).to be_true
       end
       
       it "should return false if not in the commutator subgroup" do
-        c2 = Word.new("x_0.x_1.x^-2")
+        c2 = Word.new("x_0.x_1.x_2^-2")
         expect(c2.in_commF?).to be_false
       end
     end

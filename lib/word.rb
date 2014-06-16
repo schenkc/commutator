@@ -56,8 +56,8 @@ class Word
     letters.inject(0) { |accum, letter| accum += letter.exp.abs }
   end
 
-  def eql?(compare)
-    self == compare
+  def different_representation?(word)
+    
   end
   
   def ==(compare)
@@ -98,7 +98,7 @@ class Word
   end
   
   def combine_like_terms
-    Word.new(self.to_s).remove_inverses!
+    Word.new(self.to_s).combine_like_terms!
   end
   
   def swap!(i,j)
@@ -206,20 +206,11 @@ class Word
   end
   
   def in_commF?
-    z = 0
-    j = 0
-    (0..self.size-1).each do |i|
-      if self[i].index == 0
-        z = z + self[i].exp
-      else
-        j = j + self[i].exp
-      end
-    end
-    if z == 0 && j == 0
-      return true
-    else
-      return false
-    end
+    z, j = 0, 0
+    
+    self.each { |letter| letter.index == 0 ? z += letter.exp : j += letter.exp }
+        
+    z == 0 && j == 0
   end
   
   def word_length
