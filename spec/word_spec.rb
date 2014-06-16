@@ -324,6 +324,39 @@ describe Word do
   end
   
   describe "#number_carots" do
+    describe "should be able to use words in normal form" do
+      it "should be able to deal with pos words" do
+        w1 = Word.new("x_0.x_1.x_2")
+        expect(w1.number_carots).to eq(4)
+      end
+      
+      it "should be able to deal with neg words" do
+        w2 = Word.new("x_5^-1.x_2^-1.x_2^-1")
+        expect(w2.number_carots).to eq(6)
+      end
+      
+      it "should be able to deal with mixed words" do
+        w3 = Word.new("x_0.x_1.x_2.x_5^-1.x_2^-1.x_2^-1")
+        expect(w3.number_carots).to eq(6)
+      end
+    end
+    
+    describe "should be able to use words not in normal form" do
+      it "should be able to deal with pos words" do
+        w1 = Word.new("x_2.x_1")
+        expect(w1.number_carots).to eq(5)
+      end
+      
+      it "should be able to deal with neg words" do
+        w2 = Word.new("x_0^-1.x_4^-1.x_1^-1")
+        expect(w2.number_carots).to eq(7)
+      end
+      
+      it "should be able to deal with messes of letters" do
+        w3 = Word.new("x_4^-1.x_0.x_1^-1.x_2")
+        expect(w3.number_carots).to eq(8)
+      end
+    end
     
   end
 end
