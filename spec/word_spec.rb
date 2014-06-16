@@ -274,7 +274,29 @@ describe Word do
   end
   
   describe "#in_commF?" do
+    describe "should deal with words in normal form" do
+      it "should return true if in commutator subgroup" do
+        c1 = Word.new("x_0^2.x_1.x_2^-1.x_0^2")
+        expect(c1.in_commF?).to be_true
+      end
+      
+      it "should return false if not in the commutator subgroup" do
+        c2 = Word.new("x_0.x_1.x^-2")
+        expect(c2.in_commF?).to be_false
+      end
+    end
     
+    describe "should deal with words not in normal form" do
+      it "should return true if in commutator subgroup" do
+        c3 = Word.new("x_0^-1.x_1.x_4^-1.x_0")
+        expect(c3.in_commF?).to be_true
+      end
+      
+      it "should return false if not in the commutator subgroup" do
+        c4 = Word.new("x_1^-1.x_2^2")
+        expect(c4.in_commF?).to be_false
+      end
+    end
   end
   
   describe "#word_length" do
