@@ -312,11 +312,37 @@ describe Word do
   end
   
   describe "#pos_word" do
+    it "should return the whole word (in normal form) when pos" do
+      w = Word.new("x_1.x_0")
+      expect(w.pos_word).to eq(Word.new("x_0.x_2"))
+    end
     
+    it "should return the empty word if word in neg" do
+      w = Word.new("x_1^-1")
+      expect(w.pos_word).to eq(Word.new(""))
+    end
+    
+    it "should return just the positive part" do
+      w = Word.new("x_0.x_3.x_6^-1.x_1^-1")
+      expect(w.pos_word).to eq(Word.new("x_0.x_3"))
+    end
   end
   
   describe "#neg_word" do
+    it "should return the whole word (in normal form) when neg" do
+      w = Word.new("x_0^-1.x_1^-1")
+      expect(w.neg_word).to eq(Word.new("x_2^-1.x_0^-1"))
+    end
     
+    it "should return the empty word if word in pos" do
+      w = Word.new("x_1")
+      expect(w.neg_word).to eq(Word.new(""))
+    end
+    
+    it "should return just the positive part" do
+      w = Word.new("x_0.x_3.x_6^-1.x_1^-1")
+      expect(w.neg_word).to eq(Word.new("x_6^-1.x_1^-1"))
+    end
   end
   
   describe "#conjucate_down!" do
