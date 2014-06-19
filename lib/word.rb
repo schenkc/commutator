@@ -57,7 +57,8 @@ class Word
   end
 
   def different_representation?(word)
-    
+    return false if self == word
+    self.to_normal_form == word.to_normal_form
   end
   
   def ==(compare)
