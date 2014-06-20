@@ -1,3 +1,5 @@
+require "debugger"
+
 class Word
   attr_accessor :letters
   
@@ -66,11 +68,12 @@ class Word
   end
   
   def nil?
-    self == nil
+    self.letters.empty?
   end
   
   def invert!
     letters.map! { |letter| letter.invert! }.reverse!
+    
     self
   end
   
@@ -99,7 +102,7 @@ class Word
   end
   
   def combine_like_terms
-    Word.new(self.to_s).combine_like_terms!
+    self.dup.combine_like_terms!
   end
   
   def swap!(i,j)

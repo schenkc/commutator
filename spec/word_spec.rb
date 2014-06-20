@@ -17,6 +17,10 @@ describe Word do
     
   end
   
+  describe "#parse_letter_data" do
+    
+  end
+  
   describe "#to_s" do
     it "return a string" do
       expect(a.to_s).to eq("x_0.x_1.x_0")
@@ -85,7 +89,7 @@ describe Word do
   end
   
   describe "#different_representation?" do
-    it "returns true when the letters' order and are the same" do
+    it "returns true when words are equivalent" do
       expect(b.different_representation?(b_normal)).to be_true
     end
     
@@ -99,8 +103,8 @@ describe Word do
   end
   
   describe "#==" do
-    it "returns true when the letters' order and are the same" do
-      expect(b == b_normal).to be_true
+    it "returns false with different representations" do
+      expect(b == b_normal).to be_false
     end
     
     it "returns false when the words are not equivalent" do
