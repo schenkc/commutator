@@ -17,8 +17,26 @@ describe Word do
     
   end
   
-  describe "#parse_letter_data" do
+  describe "::parse_letter_data" do
+    it "should set index and exponent correctly" do
+      expect(Word.parse_letter_data("x_0")).to eq([Letter.new(0,1)])
+      expect(Word.parse_letter_data("x_1^-1")).to eq([Letter.new(1,-1)])
+      expect(Word.parse_letter_data("x_2^0")).to eq([Letter.new(2,0)])
+    end
     
+    it 'should raise "poorly formed expression"' do
+      expect do
+        Word.parse_letter_data("x_^")
+      end.to raise_error("Poorly formed expression, try again")
+      
+      expect do
+        Word.parse_letter_data("x_1^a")
+      end.to raise_error("Poorly formed expression, try again")
+      
+      expect do
+        Word.parse_letter_data("x_0^")
+      end.to raise_error("Poorly formed expression, try again")
+    end
   end
   
   describe "#to_s" do
@@ -39,7 +57,7 @@ describe Word do
   describe "#[]" do
     it "should return a letter object" do
       expect(a[0]).to be_a_kind_of(Letter)
-      expect(a[0]).to eq(Letter.new("x_0"))
+      expect(a[0]).to eq(Letter.new(0,1))
     end
     
   end
@@ -47,12 +65,12 @@ describe Word do
   describe "#[]=" do
     it "should replace the ith letter, with a letter" do
       a[0]=d[0]
-      expect(a).to eq(Word.new("x_5^-3.x_1.x_0")) 
+      expect(a).to eq(Word.new("x_5^-1.x_1.x_0")) 
     end
     
     it "should add a letter to a new bin" do
       a[3] = d[0]
-      expect(a).to eq(Word.new("x_0.x_1.x_0.x_5^-3"))
+      expect(a).to eq(Word.new("x_0.x_1.x_0.x_5^-1"))
     end
   end
   

@@ -6,8 +6,37 @@ class Word
   def initialize(word)
     @letters = []
     word.split('.').each do |letter|
-      @letters << Letter.new(letter)
+      @letters += Word.parse_letter_data(letter)
     end
+  end
+  
+  def self.parse_letter_data(str)
+    regex = /x_(\d+)(\^(\-?\d*))?/
+    letter_data = regex.match(str)
+    
+    if letter_data
+      index = letter_data[1].to_i
+      raise "Poorly formed expression, try agian" if index < 0
+      if letter_data[2].nil?
+        exp = 1
+      elsif letter_data[2] && letter_data[3] != ""
+        exp = Integer(letter_data[3])
+      elsif letter_data[2] && letter_data[3] == ""
+        raise "Poorly formed expression, try again"
+      end
+    else
+      raise "Poorly formed expression, try again"
+    end
+    
+    result = []
+    if exp >= -1 && exp <= 1
+      result << Letter.new(index, exp)
+    elsif exp < -1
+      exp.abs.times { result << Letter.new(index, -1) }
+    elsif exp > 1
+      exp.abs.times { result << Letter.new(index, 1) }
+    end
+    return result
   end
   
   def to_s

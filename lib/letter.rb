@@ -4,26 +4,13 @@ class Letter
 
   
   def initialize(index, exp = 1)
-    # regex = /x_(\d+)(\^(\-?\d*))?/
-    # letter_data = regex.match(letter_string)
+    
     
     @index = index
     raise "Bad index, try again" if @index < 0
     @exp = exp
     raise "Bad exponent, try again" if @exp < -1 || @exp > 1
-    # if letter_data
-    #   @index = letter_data[1].to_i
-    #   raise "Bad index, try again" if @index < 0
-    #   if letter_data[2].nil?
-    #     @exp = 1
-    #   elsif letter_data[2] && letter_data[3] != ""
-    #     @exp = Integer(letter_data[3])
-    #   elsif letter_data[2] && letter_data[3] == ""
-    #     raise "Bad exponent, try again"
-    #   end
-    # else
-    #   raise "Bad index, try again"
-    # end
+    
   end
   
   def to_s
