@@ -126,12 +126,14 @@ class Word
     self.each do |letter|
       result * letter.dup
     end
+    
     result
   end
   
   def <<(letter)
     raise "Can only append a letter object" unless letter.class == Letter
     @letters << letter
+    
     self
   end
   
@@ -182,10 +184,11 @@ class Word
   def combine_like_terms!
     i=0
     until self[i+1].nil?
-      if self[i].index == self[i+1].index
-        self[i].exp += self[i+1].exp
+      if self[i].exp == 0
+        delete_letter!(i)
+      elsif self[i].inverse?(self[i+1])
         delete_letter!(i+1)
-        delete_letter!(i) if self[i].exp == 0
+        delete_letter!(i)
         i = 0
       else
         i +=1
@@ -199,6 +202,7 @@ class Word
   end
   
   def swap!(i,j)
+    return self if i > letters.length || j > letters.length
     letters[i], letters[j] = letters[j], letters[i]
     self
   end

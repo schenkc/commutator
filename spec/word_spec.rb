@@ -234,6 +234,11 @@ describe Word do
       another_word.combine_like_terms!
       expect(another_word).to eq(Word.new("x_1.x_3"))
     end
+    
+    it "removes a^0" do
+      word = Word.new("x_0^0.x_1")
+      expect(word.combine_like_terms!).to eq(Word.new("x_1"))
+    end
   end
   
   describe "#combine_like_terms" do
