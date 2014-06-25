@@ -3,7 +3,7 @@ require "debugger"
 class Word
   attr_accessor :letters
   
-  def initialize(word)
+  def initialize(word = "")
     @letters = []
     word.split('.').each do |letter|
       @letters += Word.parse_letter_data(letter)
@@ -16,7 +16,7 @@ class Word
     
     if letter_data
       index = letter_data[1].to_i
-      raise "Poorly formed expression, try agian" if index < 0
+      raise "Poorly formed expression, try again" if index < 0
       if letter_data[2].nil?
         exp = 1
       elsif letter_data[2] && letter_data[3] != ""
@@ -31,29 +31,71 @@ class Word
     result = []
     if exp >= -1 && exp <= 1
       result << Letter.new(index, exp)
-    elsif exp < -1
-      exp.abs.times { result << Letter.new(index, -1) }
-    elsif exp > 1
-      exp.abs.times { result << Letter.new(index, 1) }
+    else
+      exp.abs.times { result << Letter.new(index, exp/exp.abs) }
     end
     return result
   end
   
   def to_s
+    return "" if letters.length < 1
+    
     word_array = []
     
-    letters.each do |letter|
-      word_array << letter.to_s
+    current_index = letters.first.index
+    current_exp = letters.first.exp
+    
+    letters[1..-1].each do |letter|
+      if letter.index == current_index
+        current_exp += letter.exp
+      else
+        if current_exp == 1
+          word_array << "x_#{current_index}"
+        else
+          word_array << "x_#{current_index}^#{current_exp}"
+        end
+        
+        current_index = letter.index
+        current_exp = letter.exp
+      end
+    end
+    
+    if current_exp == 1
+      word_array << "x_#{current_index}"
+    else
+      word_array << "x_#{current_index}^#{current_exp}"
     end
     
     word_array.join('.')
   end
   
   def to_latex
+    return "" if letters.length < 1
+    
     word_array = []
     
-    letters.each do |letter|
-      word_array << letter.to_latex
+    current_index = letters.first.index
+    current_exp = letters.first.exp
+    
+    letters[1..-1].each do |letter|
+      if letter.index == current_index
+        current_exp += letter.exp
+      else
+        if current_exp == 1
+          word_array << "x_{#{current_index}}"
+        else
+          word_array << "x_{#{current_index}}^{#{current_exp}}"
+        end
+        
+        current_index = letter.index
+        current_exp = letter.exp
+      end
+    end
+    
+    if current_exp == 1
+      word_array << "x_{#{current_index}}"
+    else
+      word_array << "x_{#{current_index}}^{#{current_exp}}"
     end
     
     word_array.join('.')
@@ -80,7 +122,29 @@ class Word
   end
   
   def dup
-    Word.new(self.to_s)
+    result = Word.new
+    self.each do |letter|
+      result * letter.dup
+    end
+    result
+  end
+  
+  def <<(letter)
+    raise "Can only append a letter object" unless letter.class == Letter
+    @letters << letter
+    self
+  end
+  
+  def *(word)
+    if word.class == Word
+      @letters += word.letters
+    elsif word.class == Letter
+      self << word
+    else
+      raise "What?"
+    end
+    
+    self
   end
   
   def number_of_letters

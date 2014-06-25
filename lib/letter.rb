@@ -5,9 +5,9 @@ class Letter
   
   def initialize(index, exp = 1)
     
-    
     @index = index
     raise "Bad index, try again" if @index < 0
+    
     @exp = exp
     raise "Bad exponent, try again" if @exp < -1 || @exp > 1
     

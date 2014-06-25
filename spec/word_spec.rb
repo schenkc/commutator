@@ -43,6 +43,7 @@ describe Word do
     it "return a string" do
       expect(a.to_s).to eq("x_0.x_1.x_0")
       expect(b.to_s).to eq("x_0^-1.x_1")
+      expect(d.to_s).to eq("x_5^-3")
       expect(e.to_s).to eq("x_0")
     end
   end
@@ -50,6 +51,7 @@ describe Word do
   describe "#to_latex" do
     it "should read like latex" do
       expect(c.to_latex).to eq("x_{0}.x_{3}.x_{0}^{-1}")
+      expect(d.to_latex).to eq("x_{5}^{-3}")
       expect(e.to_latex).to eq("x_{0}")
     end
   end
@@ -71,6 +73,35 @@ describe Word do
     it "should add a letter to a new bin" do
       a[3] = d[0]
       expect(a).to eq(Word.new("x_0.x_1.x_0.x_5^-1"))
+    end
+  end
+  
+  describe "#<<" do
+    it "should add a letter on the end of the letters array" do
+      l = Letter.new(0,1)
+      expect(a << l).to eq(Word.new("x_0.x_1.x_0^2"))
+    end
+    
+    it "should raise raise error if not a letter" do
+      expect do
+        a << d
+      end.to raise_error("Can only append a letter object")
+    end
+  end
+  
+  describe "#*" do
+    it "should multiple two words" do
+      expect(a * c).to eq(Word.new("x_0.x_1.x_0.x_0.x_3.x_0^-1"))
+    end
+    
+    it "should treat a letter as a word" do
+      l = Letter.new(0,1)
+      expect(a * l).to eq(Word.new("x_0.x_1.x_0^2"))
+    end
+    
+    it "should understand the empty word" do
+      empty = Word.new
+      expect(empty * a).to eq(a)
     end
   end
   
@@ -151,8 +182,8 @@ describe Word do
     end
     it "does reverse the letter order and negate exponents" do
       b.invert! # b = x_0^-1.x_1, b^-1 = x_1^-1.x_0
-      expect(b[0]).to eq(Letter.new("x_1^-1"))
-      expect(b[1]).to eq(Letter.new("x_0"))
+      expect(b[0]).to eq(Letter.new(1, -1))
+      expect(b[1]).to eq(Letter.new(0, 1))
     end
     
   end
