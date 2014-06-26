@@ -288,6 +288,113 @@ describe Word do
     end
   end
   
+  describe "#move_right(i)" do
+    it "words of length 1 shoud be unchanged" do
+      expect(e.move_right(0)).to eq(Word.new("x_0"))
+    end
+    
+    it "raise an error if i is bigger than the letters array" do
+      expect do
+        e.move_right(1)
+      end.to raise_error("No letter to move.")
+    end
+    
+    describe "when both letters are positive" do
+      it "both letters have equal index" do
+        word = Word.new("x_0.x_0")
+        expect(word.move_right(0)).to eq(Word.new("x_0.x_0"))
+      end
+      
+      it "big then little" do
+        word = Word.new("x_1.x_0")
+        expect(word.move_right(0)).to eq(Word.new("x_2.x_0"))
+      end
+      
+      it "little then big and different greater than 1" do
+        word = Word.new("x_2.x_0")
+        expect(word.move_right(0)).to eq(Word.new("x_1.x_0"))
+      end
+      
+      it "letter then big and difference equal to 1" do
+        # word = Word.new("x_0.x_1.x_0") == a
+        expect(a.move_right(1)).to eq(Word.new("x_0^2.x_1.x_1^-1.x_0^-1.x_1.x_0"))
+      end
+    end
+    
+    describe "when both letters are negitive" do
+      it "both letters have equal index" do
+        word = Word.new("x_0^-1.x_0^-1")
+        expect(word.move_right(0)).to eq(Word.new("x_0^-1.x_0^-1"))
+      end
+      
+      it "little then big" do
+        word = Word.new("x_0^-1.x_1^-1")
+        expect(word.move_right(0)).to eq(Word.new("x_2^-1.x_0^-1"))
+      end
+      
+      it "big then little and different greater than 1" do
+        word = Word.new("x_2^-1.x_0^-1")
+        expect(word.move_right(0)).to eq(Word.new("x_0^-1.x_1^-1"))
+      end
+      
+      it "big then little and difference equal to 1" do
+        word = Word.new("x_1^-1.x_0^-1")
+        expect(a.move_right(0)).to eq(Word.new("x_0^-1.x_1^-1.x_1.x_0.x_1^-1.x_0^-1"))
+      end
+      
+    end
+    
+    describe "the first letter is negitive and the second positive" do
+      it "big then little" do
+        word = Word.new("x_1^-1.x_0")
+        expect(word.move_right(0)).to eq(Word.new("x_0.x_2^-1"))
+      end
+      
+      it "little then big" do
+        word = Word.new("x_0^-1.x_1")
+        expect(word.move_right(0)).to eq(Word.new("x_2.x_0^-1"))
+      end
+      
+      it "equal index on both" do
+        word = Word.new("x_0^-1.x_0")
+        expect(word.move_right(0)).to eq(Word.new("x_0.x_0^-1"))
+      end
+    end
+    
+    describe "the first letter is positive and the second it negitive" do
+      describe "the difference between indexes is greater than 1" do
+        it "big then little" do
+          word = Word.new("x_5.x_3^-1")
+          expect(word.move_right(0)).to eq(Word.new("x_3^-1.x_4"))
+        end
+        
+        it "little than big" do
+          word = Word.new("x_3.x_5^-1")
+          expect(word.move_right(0)).to eq(Word.new("x_4^-1.x_3"))
+        end
+      end
+      
+      describe "the difference between the indexes is 1" do
+        it "big then little" do
+          word = Word.new("x_4.x_3^-1")
+          expect(word.move_right(0)).to eq(Word.new("x_3^-1.x_4.x_4^-1.x_3.x_4.x_3^-1"))
+        end
+        
+        it "little then big" do
+          word = Word.new("x_3.x_4^-1")
+          expect(word.move_right(0)).to eq(Word.new("x_4^-1.x_3.x_3^-1.x_4.x_3.x_4^-1"))
+        end
+      end
+      
+      describe "the indexes are equal" do
+        it "swap letters" do
+          word = Word.new("x_4.x_4^-1")
+          expect(word.move_right(0)).to eq(Word.new("x_4^-1.x_4"))
+        end
+      end
+    end
+  end
+  
   describe "#to_normal_form!" do
     it "words in normal form should be unchanged" do
       a1 = Word.new("x_0.x_1")
