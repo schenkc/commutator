@@ -295,7 +295,7 @@ describe Word do
     
     it "raise an error if i is bigger than the letters array" do
       expect do
-        e.move_right(1)
+        a.move_right(3)
       end.to raise_error("No letter to move.")
     end
     
@@ -307,17 +307,17 @@ describe Word do
       
       it "big then little" do
         word = Word.new("x_1.x_0")
-        expect(word.move_right(0)).to eq(Word.new("x_2.x_0"))
+        expect(word.move_right(0)).to eq(Word.new("x_0.x_2"))
       end
       
       it "little then big and different greater than 1" do
-        word = Word.new("x_2.x_0")
+        word = Word.new("x_0.x_2")
         expect(word.move_right(0)).to eq(Word.new("x_1.x_0"))
       end
       
-      it "letter then big and difference equal to 1" do
+      it "little then big and difference equal to 1" do
         # word = Word.new("x_0.x_1.x_0") == a
-        expect(a.move_right(1)).to eq(Word.new("x_0^2.x_1.x_1^-1.x_0^-1.x_1.x_0"))
+        expect(a.move_right(0)).to eq(Word.new("x_1.x_0.x_0^-1.x_1^-1.x_0.x_1.x_0"))
       end
     end
     

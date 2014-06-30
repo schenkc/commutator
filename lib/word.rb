@@ -207,6 +207,37 @@ class Word
     self
   end
   
+  def move_right(i)
+    return self if letters.length == 1 && i == 0
+    raise "No letter to move." unless i < letters.length
+    
+    left = letters[i]
+    right = letters[i+1]
+    
+    if left.pos? && right.pos?
+      if left.index == right.index
+        return self
+      elsif left.index < right.index && right.index - left.index > 1
+        letters[i+1].lower_index!
+        self.swap!(i, i+1)
+      elsif left.index < right.index && right.index - left.index == 1
+        right_index = right.index
+        left_index = left.index
+        
+        sub_word = [Letter.new(right_index, 1), Letter.new(left_index,1), 
+                    Letter.new(left_index, -1), Letter.new(right_index, -1), 
+                    Letter.new(left_index, 1), Letter.new(right_index, 1)]
+        letters[i,2] = sub_word
+        # debugger
+        self
+      else
+        letters[i].raise_index!
+        self.swap!(i, i+1)
+      end
+    end
+
+  end
+  
   def to_normal_form!
     i = 0
     until self[i+1].nil?
