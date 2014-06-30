@@ -46,7 +46,7 @@ class Word
     current_exp = letters.first.exp
     
     letters[1..-1].each do |letter|
-      if letter.index == current_index
+      if letter.index == current_index && letter.exp != 0 && letter.exp * current_exp > 0
         current_exp += letter.exp
       else
         if current_exp == 1
@@ -214,24 +214,45 @@ class Word
     left = letters[i]
     right = letters[i+1]
     
+    
+    
     if left.pos? && right.pos?
       if left.index == right.index
         return self
-      elsif left.index < right.index && right.index - left.index > 1
-        letters[i+1].lower_index!
+      elsif right.index - left.index > 1
+        right.lower_index!
         self.swap!(i, i+1)
-      elsif left.index < right.index && right.index - left.index == 1
+      elsif right.index - left.index == 1
         right_index = right.index
         left_index = left.index
-        
+
         sub_word = [Letter.new(right_index, 1), Letter.new(left_index,1), 
                     Letter.new(left_index, -1), Letter.new(right_index, -1), 
                     Letter.new(left_index, 1), Letter.new(right_index, 1)]
         letters[i,2] = sub_word
-        # debugger
         self
       else
-        letters[i].raise_index!
+        left.raise_index!
+        self.swap!(i, i+1)
+      end
+    elsif left.neg? && right.neg?
+      if left.index == right.index
+        return self
+      elsif left.index - right.index > 1
+        left.lower_index!
+        self.swap!(i, i+1)
+      elsif left.index - right.index == 1
+        little = right.index
+        big = left.index
+        
+        sub_word = [Letter.new(big, -1), Letter.new(little, -1),
+                    Letter.new(big, 1), Letter.new(little, 1),
+                    Letter.new(little, -1), Letter.new(big, -1)]
+                    
+        letters[i,2] = sub_word
+        return self
+      else
+        letters[i+1].raise_index!
         self.swap!(i, i+1)
       end
     end
