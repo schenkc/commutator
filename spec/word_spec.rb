@@ -339,7 +339,7 @@ describe Word do
       
       it "big then little and difference equal to 1" do
         word = Word.new("x_1^-1.x_0^-1")
-        expect(word.move_right(0)).to eq(Word.new("x_0^-1.x_1^-1.x_1.x_0.x_1^-1.x_0^-1"))
+        expect(word.move_right(0)).to eq(Word.new("x_1^-1.x_0^-1.x_1.x_0.x_0^-1.x_1^-1"))
       end
       
     end
