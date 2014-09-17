@@ -318,6 +318,8 @@ describe Word do
       it "little then big and difference equal to 1" do
         # word = Word.new("x_0.x_1.x_0") == a
         expect(a.move_right(0)).to eq(Word.new("x_1.x_0.x_0^-1.x_1^-1.x_0.x_1.x_0"))
+        a = Word.new("x_0.x_1.x_0")
+        expect(a.move_right(0, :left)).to eq(Word.new("x_0.x_1.x_0^-1.x_1^-1.x_1.x_0.x_0"))
       end
     end
     
@@ -340,6 +342,8 @@ describe Word do
       it "big then little and difference equal to 1" do
         word = Word.new("x_1^-1.x_0^-1")
         expect(word.move_right(0)).to eq(Word.new("x_1^-1.x_0^-1.x_1.x_0.x_0^-1.x_1^-1"))
+        word = Word.new("x_1^-1.x_0^-1")
+        expect(word.move_right(0, :left)).to eq(Word.new("x_0^-1.x_1^-1.x_1.x_0.x_1^-1.x_0^-1"))
       end
       
     end
@@ -378,11 +382,15 @@ describe Word do
         it "big then little" do
           word = Word.new("x_4.x_3^-1")
           expect(word.move_right(0)).to eq(Word.new("x_3^-1.x_4.x_4^-1.x_3.x_4.x_3^-1"))
+          word = Word.new("x_4.x_3^-1")
+          expect(word.move_right(0, :left)).to eq(Word.new("x_4.x_3^-1.x_4^-1.x_3.x_3^-1.x_4"))
         end
         
         it "little then big" do
           word = Word.new("x_3.x_4^-1")
           expect(word.move_right(0)).to eq(Word.new("x_4^-1.x_3.x_3^-1.x_4.x_3.x_4^-1"))
+          word = Word.new("x_3.x_4^-1")
+          expect(word.move_right(0, :left)).to eq(Word.new("x_3.x_4^-1.x_3^-1.x_4.x_4^-1.x_3"))
         end
       end
       

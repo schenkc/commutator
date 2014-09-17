@@ -207,56 +207,132 @@ class Word
     self
   end
   
-  def move_right(i)
+  def move_right(i, side = :right)
     return self if letters.length == 1 && i == 0
     raise "No letter to move." unless i < letters.length
     
     left = letters[i]
     right = letters[i+1]
     
-    
-    
     if left.pos? && right.pos?
-      if left.index == right.index
-        return self
-      elsif right.index - left.index > 1
-        right.lower_index!
-        self.swap!(i, i+1)
-      elsif right.index - left.index == 1
-        right_index = right.index
-        left_index = left.index
+      pos_pos_swap(i, side)
 
-        sub_word = [Letter.new(right_index, 1), Letter.new(left_index,1), 
-                    Letter.new(left_index, -1), Letter.new(right_index, -1), 
-                    Letter.new(left_index, 1), Letter.new(right_index, 1)]
-        letters[i,2] = sub_word
-        self
-      else
-        left.raise_index!
-        self.swap!(i, i+1)
-      end
+    elsif left.neg? && right.pos?
+      neg_pos_swap(i, side)
+      
     elsif left.neg? && right.neg?
-      if left.index == right.index
-        return self
-      elsif left.index - right.index > 1
-        left.lower_index!
-        self.swap!(i, i+1)
-      elsif left.index - right.index == 1
-        little = right.index
-        big = left.index
-        
-        sub_word = [Letter.new(big, -1), Letter.new(little, -1),
-                    Letter.new(big, 1), Letter.new(little, 1),
-                    Letter.new(little, -1), Letter.new(big, -1)]
-                    
-        letters[i,2] = sub_word
-        return self
-      else
-        letters[i+1].raise_index!
-        self.swap!(i, i+1)
-      end
+      neg_neg_swap(i, side)
+      
+    elsif left.pos? && right.neg?
+      pos_neg_swap(i, side)
     end
 
+  end
+  
+  def pos_pos_swap(i, side)
+    left = letters[i]
+    right = letters[i+1]
+    
+    if left.index == right.index
+      return self
+    elsif right.index - left.index > 1
+      right.lower_index!
+      self.swap!(i, i+1)
+    elsif right.index - left.index == 1
+        right_index = right.index
+        left_index = left.index
+        
+      if side == :right
+        sub_word = [Letter.new(right_index, 1), Letter.new(left_index, 1), 
+                    Letter.new(left_index, -1), Letter.new(right_index, -1), 
+                    Letter.new(left_index, 1), Letter.new(right_index, 1)]
+      elsif side == :left
+        sub_word = [Letter.new(left_index, 1), Letter.new(right_index, 1),
+                    Letter.new(left_index, -1), Letter.new(right_index, -1),
+                    Letter.new(right_index, 1), Letter.new(left_index, 1)]
+      end
+      letters[i,2] = sub_word
+      self
+    else
+      left.raise_index!
+      self.swap!(i, i+1)
+    end
+  end
+  
+  def neg_pos_swap(i, side)
+    left = letters[i]
+    left_index = left.index
+    right = letters[i+1]
+    right_index = right.index
+    
+    if left_index == right_index
+      self.swap!(i, i+1)
+    elsif right_index < left_index
+      left.raise_index!
+      self.swap!(i, i+1)
+    elsif left_index < right_index
+      right.raise_index!
+      self.swap!(i, i+1)
+    end
+  end
+  
+  def neg_neg_swap(i, side)
+    left = letters[i]
+    left_index = left.index
+    right = letters[i+1]
+    right_index = right.index
+    
+    if left_index == right_index
+      return self
+    elsif left_index < right_index # wrong order
+      right.raise_index!
+      self.swap!(i, i+1)
+    elsif left_index - right_index > 1 # right order bigger that 1 apart
+      left.lower_index!
+      self.swap!(i, i+1)
+    elsif left_index - right_index == 1 # right order, differnt exactly 1
+      
+      if side == :right
+        sub_word = [Letter.new(left_index, -1), Letter.new(right_index, -1),
+                    Letter.new(left_index, 1), Letter.new(right_index, 1),
+                    Letter.new(right_index, -1), Letter.new(left_index, -1)]
+      elsif side == :left
+        sub_word = [Letter.new(right_index, -1), Letter.new(left_index, -1),
+                    Letter.new(left_index, 1), Letter.new(right_index, 1),
+                    Letter.new(left_index, -1), Letter.new(right_index, -1)]
+      end
+      letters[i,2] = sub_word
+      self
+    end
+  end
+  
+  def pos_neg_swap(i, side)
+    left = letters[i]
+    left_index = left.index
+    right = letters[i+1]
+    right_index = right.index
+    
+    if left_index == right_index
+      self.swap!(i, i+1)
+    elsif left_index - right_index > 1
+      left.lower_index!
+      self.swap!(i, i+1)
+    elsif right_index - left_index > 1
+      right.lower_index!
+      self.swap!(i, i+1)
+    elsif left_index - right_index == 1 || right_index - left_index == 1
+      if side == :right
+        sub_word = [Letter.new(left_index, 1), Letter.new(right_index, -1),
+                    Letter.new(left_index, -1), Letter.new(right_index, 1),
+                    Letter.new(right_index, -1), Letter.new(left_index, 1)] 
+      elsif side == :left
+        sub_word = [Letter.new(right_index, -1), Letter.new(left_index, 1),
+                    Letter.new(right_index, 1), Letter.new(left_index, -1),
+                    Letter.new(left_index, 1), Letter.new(right_index, -1)]
+      end
+      letters[i,2] = sub_word
+      self
+    end
   end
   
   def to_normal_form!
