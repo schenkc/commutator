@@ -44,6 +44,10 @@ class Letter
   #   @exp += input
   # end
   
+  def dup
+    Letter.new(@index, @exp)
+  end
+  
   def invert!
     @exp = -@exp
     self
@@ -54,13 +58,13 @@ class Letter
   end 
   
   def ==(letter)
-    return false if letter.nil? || letter.class != Letter
-    return (index == letter.index && exp == letter.exp) unless letter.nil?
+    return false if (letter.nil? || letter.class != Letter)
+    return (index == letter.index && exp == letter.exp)
   end
   
   def inverse?(letter)
-    return (index == letter.index && exp == -letter.exp) unless letter.nil?
     return false if letter.nil?
+    return (index == letter.index && exp == -letter.exp)
   end 
   
   def neg?

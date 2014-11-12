@@ -3,7 +3,7 @@ require 'letter'
 
 describe Letter do
   let(:x_0) { Letter.new(0, 1) }
-  let(:x_1) { Letter.new(1, -1)}
+  let(:x_1) { Letter.new(1, -1) }
   let(:x_10) { Letter.new(1, 0) }
 
   describe "#initialize" do
@@ -68,7 +68,7 @@ describe Letter do
     end
     
     it "should be a different object" do
-      expect(x_10.dup.object_id == x_10.object_id).to be_false
+      expect(x_10.dup.object_id).to_not eq(x_10.object_id)
     end
   end
 
@@ -120,59 +120,59 @@ describe Letter do
   describe '#==' do
     it 'should return true when letters are equal (but different instances)' do
       letter = Letter.new(1, -1)
-      expect(x_1 == letter).to be_true
+      expect(x_1).to eq(letter)
     end
     
     it 'should return false with different exponets' do
       letter = Letter.new(1,1)
-      expect(letter == x_1).to be_false
+      expect(letter).to_not eq(x_1)
     end
     
-    it 'should return false with different indexs' do
+    it 'should return false with different indexes' do
       letter = Letter.new(1,1)
-      expect(letter == x_0).to be_false
+      expect(letter).to_not eq(x_0)
     end
     
     it "should return false if not a letter" do
-      expect( 2 == x_0 ).to be_false
+      expect(2).to_not eq(x_0)
     end
   end
 
   describe '#inverse?' do
     it 'should return true if index is the same, and exponent inverses different' do
       letter = Letter.new(0,-1)
-      expect(x_0.inverse?(letter)).to be_true
+      expect(x_0.inverse?(letter)).to eq(true)
     end
     
     it 'should return false if the index is the same, and the exponents not inverses' do
-      expect(x_0.inverse?(x_0)).to be_false
+      expect(x_0.inverse?(x_0)).to eq(false)
     end
     
     it 'should return false if different index' do
       letter = Letter.new(1,1)
-      expect(x_0.inverse?(letter)).to be_false
+      expect(x_0.inverse?(letter)).to eq(false)
     end
   end
 
   describe '#neg?' do
     it 'should return true if exp is less than 0' do
       letter = Letter.new(1,-1)
-      expect(letter.neg?).to be_true
+      expect(letter.neg?).to eq(true)
     end
     
     it 'should return false if exp is greater than 0' do
-      expect(x_0.neg?).to be_false
+      expect(x_0.neg?).to eq(false)
     end
   end
 
   describe '#pos?' do
     it 'should return true if exp is greater than 0' do
-      expect(x_0.pos?).to be_true
+      expect(x_0.pos?).to eq(true)
     end
     
     it 'should return false if exp is less than 0' do
       letter = Letter.new(1,-1)
-      expect(letter.pos?).to be_false
+      expect(letter.pos?).to eq(false)
     end
   end
 end
