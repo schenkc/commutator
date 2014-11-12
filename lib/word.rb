@@ -1,12 +1,16 @@
-require "debugger"
+require "byebug"
 
 class Word
   attr_accessor :letters
   
-  def initialize(word = "")
-    @letters = []
-    word.split('.').each do |letter|
-      @letters += Word.parse_letter_data(letter)
+  def initialize(collection = "")
+    if collection.is_a? String
+      @letters = []
+      collection.split('.').each do |letter|
+        @letters += Word.parse_letter_data(letter)
+      end
+    elsif collection.is_a? Array
+      @letters = collection.map(&:dup)
     end
   end
   
@@ -137,16 +141,14 @@ class Word
     self
   end
   
-  def *(word)
-    if word.class == Word
-      @letters += word.letters
-    elsif word.class == Letter
-      self << word
+  def *(other)
+    if other.class == Word
+      Word.new(@letters + other.letters)
+    elsif other.class == Letter
+      self << other
     else
       raise "What?"
     end
-    
-    self
   end
   
   def number_of_letters

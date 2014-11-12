@@ -90,7 +90,7 @@ describe Word do
   end
   
   describe "#*" do
-    it "should multiple two words" do
+    it "should multiply two words" do
       expect(a * c).to eq(Word.new("x_0.x_1.x_0.x_0.x_3.x_0^-1"))
     end
     
@@ -122,7 +122,7 @@ describe Word do
     end
     
     it "should be a different object" do
-      expect(b.dup.object_id == b.object_id).to be_false
+      expect(b.dup.object_id == b.object_id).to eq(false)
     end
   end
   
@@ -139,40 +139,40 @@ describe Word do
   
   describe "#different_representation?" do
     it "returns true when words are equivalent" do
-      expect(b.different_representation?(b_normal)).to be_true
+      expect(b.different_representation?(b_normal)).to eq(true)
     end
     
     it "returns false when the words are not equivalent" do
-      expect(a.different_representation?(b)).to be_false
+      expect(a.different_representation?(b)).to eq(false)
     end
     
     it "returns false when the words are identical as letters" do
-      expect(a.different_representation?(a)).to be_false
+      expect(a.different_representation?(a)).to eq(false)
     end
   end
   
   describe "#==" do
     it "returns false with different representations" do
-      expect(b == b_normal).to be_false
+      expect(b == b_normal).to eq(false)
     end
     
     it "returns false when the words are not equivalent" do
-      expect(a == b).to be_false
+      expect(a == b).to eq(false)
     end
     
     it "returns true when the words are identical as letters" do
       q = Word.new("x_0.x_1.x_0")
-      expect(a == q).to be_true
+      expect(a == q).to eq(true)
     end
   end
   
   describe "#nil?" do
     it "returns true when the word has no letters" do
-      expect(empty.nil?).to be_true
+      expect(empty.nil?).to eq(true)
     end
     
     it "returns false when the word has letters" do
-      expect(a.nil?).to be_false
+      expect(a.nil?).to eq(false)
     end
   end
   
@@ -210,7 +210,7 @@ describe Word do
     it "removes a.a^-1" do
       word = Word.new("x_0.x_0^-1")
       word.combine_like_terms!
-      expect(word.nil?).to be_true
+      expect(word.nil?).to eq(true)
       
       other_word = Word.new("x_0.x_0^-1.x_1")
       other_word.combine_like_terms!
@@ -224,7 +224,7 @@ describe Word do
     it "removes a^-1.a" do
       word = Word.new("x_0^-1.x_0")
       word.combine_like_terms!
-      expect(word.nil?).to be_true
+      expect(word.nil?).to eq(true)
       
       other_word = Word.new("x_0^-1.x_0.x_1")
       other_word.combine_like_terms!
@@ -245,7 +245,7 @@ describe Word do
     it "removes a.a^-1" do
       word = Word.new("x_0.x_0^-1")
       w = word.combine_like_terms
-      expect(w.nil?).to be_true
+      expect(w.nil?).to eq(true)
       
       other_word = Word.new("x_0.x_0^-1.x_1")
       ow = other_word.combine_like_terms
@@ -259,7 +259,7 @@ describe Word do
     it "removes a^-1.a" do
       word = Word.new("x_0^-1.x_0")
       w = word.combine_like_terms
-      expect(w.nil?).to be_true
+      expect(w.nil?).to eq(true)
       
       other_word = Word.new("x_0^-1.x_0.x_1")
       ow = other_word.combine_like_terms
@@ -450,24 +450,24 @@ describe Word do
     describe "should deal with words in normal form" do
       it "should return true if in commutator subgroup" do
         c1 = Word.new("x_0^2.x_1.x_2^-1.x_0^-2")
-        expect(c1.in_commF?).to be_true
+        expect(c1.in_commF?).to eq(true)
       end
       
       it "should return false if not in the commutator subgroup" do
         c2 = Word.new("x_0.x_1.x_2^-2")
-        expect(c2.in_commF?).to be_false
+        expect(c2.in_commF?).to eq(false)
       end
     end
     
     describe "should deal with words not in normal form" do
       it "should return true if in commutator subgroup" do
         c3 = Word.new("x_0^-1.x_1.x_4^-1.x_0")
-        expect(c3.in_commF?).to be_true
+        expect(c3.in_commF?).to eq(true)
       end
       
       it "should return false if not in the commutator subgroup" do
         c4 = Word.new("x_1^-1.x_2^2")
-        expect(c4.in_commF?).to be_false
+        expect(c4.in_commF?).to eq(false)
       end
     end
   end
