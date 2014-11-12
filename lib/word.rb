@@ -126,12 +126,7 @@ class Word
   end
   
   def dup
-    result = Word.new
-    self.each do |letter|
-      result * letter.dup
-    end
-    
-    result
+    Word.new(self.letters)
   end
   
   def <<(letter)
@@ -184,7 +179,7 @@ class Word
   end
   
   def combine_like_terms!
-    i=0
+    i = 0
     until self[i+1].nil?
       if self[i].exp == 0
         delete_letter!(i)
@@ -193,7 +188,7 @@ class Word
         delete_letter!(i)
         i = 0
       else
-        i +=1
+        i += 1
       end
     end
     self
@@ -322,15 +317,27 @@ class Word
     elsif right_index - left_index > 1
       right.lower_index!
       self.swap!(i, i+1)
-    elsif left_index - right_index == 1 || right_index - left_index == 1
+    elsif right_index - left_index == 1
       if side == :right
+        sub_word = [Letter.new(right_index, -1), Letter.new(left_index, 1),
+                    Letter.new(left_index, -1), Letter.new(right_index, 1),
+                    Letter.new(left_index, 1), Letter.new(right_index, -1)]
+      elsif side == :left
         sub_word = [Letter.new(left_index, 1), Letter.new(right_index, -1),
                     Letter.new(left_index, -1), Letter.new(right_index, 1),
                     Letter.new(right_index, -1), Letter.new(left_index, 1)] 
-      elsif side == :left
+      end
+      letters[i,2] = sub_word
+      self
+    elsif left_index - right_index == 1
+      if side == :right
         sub_word = [Letter.new(right_index, -1), Letter.new(left_index, 1),
-                    Letter.new(right_index, 1), Letter.new(left_index, -1),
-                    Letter.new(left_index, 1), Letter.new(right_index, -1)]
+                    Letter.new(left_index, -1), Letter.new(right_index, 1),
+                    Letter.new(left_index, 1), Letter.new(right_index, -1)] 
+      elsif side == :left
+        sub_word = [Letter.new(left_index, 1), Letter.new(right_index, -1),
+                    Letter.new(left_index, -1), Letter.new(right_index, 1),
+                    Letter.new(right_index, -1), Letter.new(left_index, 1)]
       end
       letters[i,2] = sub_word
       self
