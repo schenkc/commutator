@@ -367,13 +367,9 @@ class Word
         end
       end
     end
-    # remove adjacent inverses
-    (self.number_of_letters - 2).downto(0).each do |i|
-      if self[i].inverse?(self[i+1])
-        self.delete_letter!(i+1)
-        self.delete_letter!(i)
-      end
-    end
+    combine_like_terms!
+    
+    # I think this conjugate down
     left = 0
     right = self.number_of_letters - 1
     while left != right
