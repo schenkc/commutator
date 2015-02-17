@@ -1,4 +1,4 @@
-require "byebug"
+require "pry"
 
 class Word
   attr_accessor :letters
@@ -344,102 +344,75 @@ class Word
     end
   end
   
-  def to_normal_form!
-    i = 0
-    until self[i+1].nil?
-      if self[i].neg? && self[i+1].pos?
-        if self[i].index < self[i+1].index
-          self[i].exp.abs.times {self[i+1].raise_index!}
-          swap!(i, i+1)
-          i=-1
-#          puts self
-        elsif self[i].index > self[i+1].index
-          self[i+1].exp.abs.times {self[i].raise_index!}
-          swap!(i,i+1)
-          i=-1
-#          puts self
-        elsif self[i].index == self[i+1].index
-          self[i].add_exp(self[i+1].exp)
-          delete_letter!(i+1)
-          if self[i].exp == 0
-            delete_letter!(i)
-          end
-          i=-1
-#          puts self
-        end
-      elsif self[i].pos? && self[i+1].pos?
-        if self[i].index > self[i+1].index
-          self[i+1].exp.abs.times {self[i].raise_index!}
-          swap!(i,i+1)
-          i=-1
-#          puts self
-        elsif self[i].index == self[i+1].index
-          self[i].add_exp(self[i+1].exp)
-          delete_letter!(i+1)
-#          puts self
-          i=-1
-        end
-      elsif self[i].neg? && self[i+1].neg?
-        if self[i].index < self[i+1].index
-          self[i].exp.abs.times {self[i+1].raise_index!}
-          swap!(i,i+1)
-#          puts self
-          i=-1
-        elsif self[i].index == self[i+1].index
-          self[i].add_exp(self[i+1].exp)
-          delete_letter!(i+1)
-#          puts self
-          i=-1
-        end
-      elsif self[i].pos? && self[i+1].neg?
-        if self[i].index == self[i+1].index
-          self[i].add_exp(self[i+1].exp)
-          delete_letter!(i+1)
-          if self[i].exp == 0
-            delete_letter!(i)
-          end
-#          puts self
-          i=-1
-        end
-      end 
-      i+=1      
+  def should_move_right?(i)
+    left, right = self[i], self[i+1]
+    
+    if left.pos? && right.pos?
+      return right.index < left.index
+    elsif left.neg? && right.neg?
+      return left.index < right.index
+    else
+      return left.neg? && right.pos?
     end
-    #lower index of everything when first and last letters are of the same index
-        i = 0
-    until self[i+1].nil?
-      j = i
-      #puts self      
-      #puts "i is #{i} and self[i].index is #{self[i].index}"
-      until self[j+1].nil?
-        j = j+1
-        #puts "j is #{j} and self[j].index is #{self[j].index}"
-        if ((self[i].index == self[j].index) && ((self[i+1].index-1)  != self[i].index) && ((self[j-1].index-1) != self[j].index))
-          #puts "we are in here!"
-          #puts i
-          #puts j
-          (i+1..j-1).each do |q|
-            self[q].lower_index!
-            #puts self
-          end
-          if self[j].exp == -1
-              delete_letter!(j)
-            else
-              self[j].add_exp(1)
-            end
-            if self[i].exp == 1
-              delete_letter!(i)
-            else
-              self[i].add_exp(-1)
-          end
-          i=0
-          j=i
-          #j = j+1
-        else
-          #j = j+1
+  end
+  
+  def to_normal_form!
+    swapped = true
+    while swapped
+      swapped = false
+      (0...self.number_of_letters - 1).each do |i|
+        if self.should_move_right?(i)
+          self.move_right(i)
+          swapped = true
         end
       end
-      i = i+1
     end
+    # remove adjacent inverses
+    (self.number_of_letters - 2).downto(0).each do |i|
+      if self[i].inverse?(self[i+1])
+        self.delete_letter!(i+1)
+        self.delete_letter!(i)
+      end
+    end
+    self
+
+    # end
+    # #lower index of everything when first and last letters are of the same index
+    #     i = 0
+    # until self[i+1].nil?
+    #   j = i
+    #   #puts self
+    #   #puts "i is #{i} and self[i].index is #{self[i].index}"
+    #   until self[j+1].nil?
+    #     j = j+1
+    #     #puts "j is #{j} and self[j].index is #{self[j].index}"
+    #     if ((self[i].index == self[j].index) && ((self[i+1].index-1)  != self[i].index) && ((self[j-1].index-1) != self[j].index))
+    #       #puts "we are in here!"
+    #       #puts i
+    #       #puts j
+    #       (i+1..j-1).each do |q|
+    #         self[q].lower_index!
+    #         #puts self
+    #       end
+    #       if self[j].exp == -1
+    #           delete_letter!(j)
+    #         else
+    #           self[j].add_exp(1)
+    #         end
+    #         if self[i].exp == 1
+    #           delete_letter!(i)
+    #         else
+    #           self[i].add_exp(-1)
+    #       end
+    #       i=0
+    #       j=i
+    #       #j = j+1
+    #     else
+    #       #j = j+1
+    #     end
+    #   end
+    #   i = i+1
+    # end
     self
   end
   
@@ -528,7 +501,7 @@ class Word
   end
   
   def to_normal_form
-    Word.new(self.to_s).to_normal_form!
+    self.dup.to_normal_form!
   end
   
   def pos_word

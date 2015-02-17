@@ -403,6 +403,34 @@ describe Word do
     end
   end
   
+  describe "#should_move_right?" do
+    it "positive over positive is ok when left is larger" do
+      a1 = Word.new("x_0.x_1")
+      expect(a1.should_move_right?(0)).to eq(false)
+      
+      a2 = Word.new("x_2.x_0")
+      expect(a2.should_move_right?(0)).to eq(true)
+    end
+    
+    it "positive over negative is never ok" do
+      a1 = Word.new("x_0.x_1^-1")
+      expect(a1.should_move_right?(0)).to eq(false)
+    end
+    
+    it "negative over negative is ok when right is larger" do
+      a1 = Word.new("x_0^-1.x_1^-1")
+      expect(a1.should_move_right?(0)).to eq(true)
+      
+      a2 = Word.new("x_2^-1.x_0^-1")
+      expect(a2.should_move_right?(0)).to eq(false)
+    end
+    
+    it "negative over positive is always ok" do
+      a1 = Word.new("x_0^-1.x_1")
+      expect(a1.should_move_right?(0)).to eq(true)
+    end
+  end
+  
   describe "#to_normal_form!" do
     it "words in normal form should be unchanged" do
       a1 = Word.new("x_0.x_1")
@@ -414,12 +442,12 @@ describe Word do
       expect(a2.to_normal_form!).to eq(Word.new("x_0.x_2"))
     end
     
-    it "can move negitive letters all the way to the right" do
+    it "can move negative letters all the way to the right" do
       a3 = Word.new("x_0^-1.x_2.x_0")
       expect(a3.to_normal_form!).to eq(Word.new("x_3"))
       
       a10 = Word.new("x_1^-1.x_2.x_0")
-      expect(a3.to_normal_form!).to eq(Word.new("x_0.x_4.x_2^-1"))
+      expect(a10.to_normal_form!).to eq(Word.new("x_0.x_4.x_2^-1"))
     end
     
     it "words in formal form should be unchanged" do
@@ -427,7 +455,7 @@ describe Word do
       expect(a4.to_normal_form!).to eq(Word.new("x_1^-1.x_0^-1"))
     end
     
-    it "can deal with negitive words" do
+    it "can deal with negative words" do
       a5 = Word.new("x_0^-1.x_1^-1")
       expect(a5.to_normal_form!).to eq(Word.new("x_2^-1.x_0^-1"))
     end
