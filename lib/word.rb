@@ -374,6 +374,31 @@ class Word
         self.delete_letter!(i)
       end
     end
+    left = 0
+    right = self.number_of_letters - 1
+    while left != right
+      if self[left].inverse?(self[right])
+        index = self[left].index
+        if self[left + 1].index - index > 1 && self[right - 1].index - index > 1
+          ((left + 1)..(right - 1)).each do |j|
+            self[j].lower_index!
+          end
+          self.delete_at(right)
+          self.delete_at(left)
+          length_changed = true
+          right -= 2
+        elsif self[left].index == self[left + 1].index
+          left += 1
+        elsif self[right].index == self[right - 1].index
+          right -= 1
+        end
+      if self[left].index > self[right].index
+        right -= 1
+      elsif self[left].index < self[right].index
+        left += 1
+      elsif self[left].index
+      end
+    end
     self
 
     # end
@@ -414,6 +439,10 @@ class Word
     #   i = i+1
     # end
     self
+  end
+  
+  def to_normal_form
+    self.dup.to_normal_form!
   end
   
   def in_commF?
@@ -499,10 +528,7 @@ class Word
       return working_word
     #end
   end
-  
-  def to_normal_form
-    self.dup.to_normal_form!
-  end
+
   
   def pos_word
     working_word = self.to_normal_form
