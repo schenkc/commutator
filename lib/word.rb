@@ -371,8 +371,8 @@ class Word
     
     # I think this conjugate down
     left = 0
-    right = self.number_of_letters - 1
-    while left != right
+    right = self.letters.length - 1
+    until left == right
       if self[left].inverse?(self[right])
         index = self[left].index
         if self[left + 1].index - index > 1 && self[right - 1].index - index > 1
@@ -381,18 +381,20 @@ class Word
           end
           self.delete_at(right)
           self.delete_at(left)
-          length_changed = true
           right -= 2
         elsif self[left].index == self[left + 1].index
           left += 1
         elsif self[right].index == self[right - 1].index
           right -= 1
         end
+      end
+      
       if self[left].index > self[right].index
         right -= 1
       elsif self[left].index < self[right].index
         left += 1
-      elsif self[left].index
+      elsif self[left].index == self[right].index
+        left = right if self[left].exp == self[right].exp
       end
     end
     self
