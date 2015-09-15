@@ -462,7 +462,7 @@ describe Word do
     
     it "can deal with multiple conjugate downs" do
       a6 = Word.new("x_0.x_1.x_5^-1.x_3^-2.x_1^-1.x_0^-1")
-      expect(a6.to_normal_form!).to eq(Word.new("x_5^-1.x_1^-2"))
+      expect(a6.to_normal_form!).to eq(Word.new("x_3^-1.x_1^-2"))
             #
       # a6 = Word.new("x_1.x_5^-1.x_3^-2.x_1^-1")
       # expect(a6.to_normal_form!).to eq(Word.new("x_5^-1.x_1^-2"))

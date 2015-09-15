@@ -379,8 +379,8 @@ class Word
           ((left + 1)..(right - 1)).each do |j|
             self[j].lower_index!
           end
-          self.delete_at(right)
-          self.delete_at(left)
+          self.delete_letter!(right)
+          self.delete_letter!(left)
           left = 0
           right = self.letters.length - 1
         elsif self[left].index == self[left + 1].index
