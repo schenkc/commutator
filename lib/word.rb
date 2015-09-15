@@ -401,45 +401,7 @@ class Word
         left = right if self[left].exp == self[right].exp
       end
     end
-    self
-
-    # end
-    # #lower index of everything when first and last letters are of the same index
-    #     i = 0
-    # until self[i+1].nil?
-    #   j = i
-    #   #puts self
-    #   #puts "i is #{i} and self[i].index is #{self[i].index}"
-    #   until self[j+1].nil?
-    #     j = j+1
-    #     #puts "j is #{j} and self[j].index is #{self[j].index}"
-    #     if ((self[i].index == self[j].index) && ((self[i+1].index-1)  != self[i].index) && ((self[j-1].index-1) != self[j].index))
-    #       #puts "we are in here!"
-    #       #puts i
-    #       #puts j
-    #       (i+1..j-1).each do |q|
-    #         self[q].lower_index!
-    #         #puts self
-    #       end
-    #       if self[j].exp == -1
-    #           delete_letter!(j)
-    #         else
-    #           self[j].add_exp(1)
-    #         end
-    #         if self[i].exp == 1
-    #           delete_letter!(i)
-    #         else
-    #           self[i].add_exp(-1)
-    #       end
-    #       i=0
-    #       j=i
-    #       #j = j+1
-    #     else
-    #       #j = j+1
-    #     end
-    #   end
-    #   i = i+1
-    # end
+    
     self
   end
   
