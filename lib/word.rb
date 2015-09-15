@@ -381,10 +381,14 @@ class Word
           end
           self.delete_at(right)
           self.delete_at(left)
-          right -= 2
+          left = 0
+          right = self.letters.length - 1
         elsif self[left].index == self[left + 1].index
           left += 1
         elsif self[right].index == self[right - 1].index
+          right -= 1
+        else
+          left += 1
           right -= 1
         end
       end
