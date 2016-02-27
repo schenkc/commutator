@@ -475,7 +475,7 @@ describe Word do
       a7 = Word.new("x_0^-1.x_2^5.x_3.x_1^-1")
       expect(a7.to_normal_form!).to eq(Word.new("x_3^5.x_4.x_2^-1.x_0^-1"))
       a8 = Word.new("x_0^-1.x_3.x_2^5.x_1^-1")
-      expect(a7.to_normal_form!).to eq(Word.new("x_3^5.x_9.x_2^-1.x_0^-1"))
+      expect(a8.to_normal_form!).to eq(Word.new("x_3^5.x_9.x_2^-1.x_0^-1"))
     end
     
   end
